@@ -117,7 +117,7 @@ class BooksBookSubjects(models.Model):
 class BooksFormat(models.Model):
     mime_type = models.CharField(max_length=32)
     url = models.CharField(max_length=256)
-    book = models.ForeignKey(BooksBook, models.DO_NOTHING)
+    book = models.ForeignKey(BooksBook, on_delete=models.CASCADE, related_name='formats')
 
     class Meta:
         managed = False

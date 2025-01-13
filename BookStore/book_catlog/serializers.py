@@ -2,14 +2,20 @@ from rest_framework import serializers
 from .models import *
 
 
-
 class QueryParamSerializer(serializers.Serializer):
-    author = serializers.CharField(max_length=100, required=False)
-    language = serializers.CharField(max_length=100, required=False)
-    topic = serializers.CharField(required=False)
-    mime_type = serializers.CharField(required=False)
-    book_id = serializers.IntegerField(required=False)
-    title = serializers.CharField(required=False)
+    
+    author = serializers.ListField(
+        child=serializers.CharField(max_length=100), required=False)
+    language = serializers.ListField(
+        child=serializers.CharField(max_length=100), required=False)
+    topic = serializers.ListField(
+        child=serializers.CharField(), required=False)
+    mime_type = serializers.ListField(
+        child=serializers.CharField(), required=False)
+    book_id = serializers.ListField(
+        child=serializers.IntegerField(), required=False)
+    title = serializers.ListField(
+        child=serializers.CharField(),required=False)
 
 class AutherSerializer(serializers.ModelSerializer):
  
@@ -39,16 +45,16 @@ class FormatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BooksFormat
-        fields = ["mime_type", "url"]
+        fields = ["url"]
 
 class BookSerializer(serializers.ModelSerializer):
     authors = AutherSerializer(many=True)
     language = LanguageSerializer(many=True)
     bookshelf = BookShelfSerializer(many=True)
     subject = SubjectSerializer(many=True)
-    format = FormatSerializer(many=True, read_only=True)
+    formats = FormatSerializer(many=True) 
 
     class Meta:
         model = BooksBook
-        fields = ["gutenberg_id", "title", "download_count", "authors", "language", "bookshelf", "subject", "format"]
+        fields = ["title", "authors", "language", "bookshelf", "subject", "formats"]
     
